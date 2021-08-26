@@ -20,11 +20,13 @@ var fr;
 let attributes = {};
 
 //flowfield vars
-var turbulence_arr = [.075, .1, .125];
+var turbulence_arr = [.001, .075, .1, .125, .25];
 var turbulence = p5.prototype.random(turbulence_arr);
+if (turbulence == .001) attributes['turbulence'] = 'very low';
 if (turbulence == .075) attributes['turbulence'] = 'low';
 if (turbulence == .100) attributes['turbulence'] = 'med';
 if (turbulence == .125) attributes['turbulence'] = 'high';
+if (turbulence == .25) attributes['turbulence'] = 'very high';
 
 var flowfield;
 
