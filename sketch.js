@@ -20,6 +20,7 @@ var fr;
 let traits = {};
 
 //flowfield vars
+var swirl = false;//p5.prototype.random < 0.1;
 var turbulence_arr = [.001, .075, .1, .125, .25];
 var turbulence = p5.prototype.random(turbulence_arr);
 if (turbulence == .001) traits['turbulence'] = 'very low';
@@ -32,7 +33,6 @@ var flowfield;
 
 //drawing vars
 var palette;
-var shapes = [];
 var density = p5.prototype.floor(p5.prototype.random(100,250));
 var margin = p5.prototype.random() < 0.5;
 border_arr = new Array();
@@ -46,12 +46,14 @@ var outlined = p5.prototype.random() < 0.75;
 traits['density'] = density;
 traits['margin'] = margin;
 traits['outlined'] = outlined;
+//traits['swirl'] = swirl;
 console.log("turbulence: " + turbulence);
 console.log("have margin: " + margin);
 console.log("outlined: " + outlined);
 console.log('density: ' + density);
+console.log('swirl: ' + swirl);
 
-//color palettes
+//color palettes from fidenza
 let luxe = {
   name: "luxe",
   bg: ['#EBE4D8'],
@@ -158,28 +160,85 @@ function nextPixel(angle) {
 }
 
 function draw() {
-  var yoff = 0;
-  for (var y = 0; y < rows; y++) {
-    var xoff = 0;
-    for (var x = 0; x < cols; x++) {
-      var index = x + y * cols;
-      var angle = noise(xoff, yoff) * TWO_PI;
-      var v = p5.Vector.fromAngle(angle);
-      v.setMag(1);
-      // flowfield[index] = v;
-      flowfield[index] = angle;
-      xoff += turbulence;
-      // stroke(0, 50);
-      // push();
-      // translate(x * pix_size, y * pix_size);
-      // rotate(v.heading());
-      // strokeWeight(1);
-      // line(0, 0, pix_size, 0);
-      // pop();
+  if (swirl) {
+    var angle = 0;
+    var d_angle = PI / 200; 
+    var swirl_index = [];
+    swirl_index.push(275);
+    flowfield[275] = angle;
+    for (var i = 1; i < 24 ; i++) {
+      if ( i % 2 != 0 ) {
+        // if i = 1,3,5,...
+        for (var j = 0 ; j < i ; j++) {
+          var prev = swirl_index[swirl_index.length - 1];
+          swirl_index.push(prev + 1);
+          angle += d_angle;
+          flowfield[prev+1] = angle;
+        }
+        for (var j = 0 ; j < i ; j++) {
+          var prev = swirl_index[swirl_index.length - 1];
+          swirl_index.push(prev + 24);
+          angle += d_angle;
+          flowfield[prev+1] = angle;
+        }
+      } else {
+        // if i = 2,4,6,...
+        for (var j = 0 ; j < i ; j++) {
+          var prev = swirl_index[swirl_index.length - 1];
+          swirl_index.push(prev - 1);
+          angle += d_angle;
+          flowfield[prev+1] = angle;
+        }
+        for (var j = 0 ; j < i ; j++) {
+          var prev = swirl_index[swirl_index.length - 1];
+          swirl_index.push(prev - 24);
+          angle += d_angle;
+          flowfield[prev+1] = angle;
+        }
+      }
     }
-    yoff += turbulence;
+    for (var j = 0 ; j < 23 ; j++) {
+      var prev = swirl_index[swirl_index.length - 1];
+      swirl_index.push(prev - 1);
+      angle += d_angle;
+      flowfield[prev+1] = angle;
+    }
+
+    for (var k = 0 ; k < flowfield.length ;k ++) {
+        stroke(0, 50);
+        push();
+        translate(k%24 * pix_size, floor(k/24) * pix_size);
+        rotate(flowfield[k]);
+        strokeWeight(1);
+        line(0, 0, pix_size, 0);
+        pop();
+    }
+
+  } else { // no swirl
+    var yoff = 0;
+    for (var y = 0; y < rows; y++) {
+      var xoff = 0;
+      for (var x = 0; x < cols; x++) {
+        var index = x + y * cols;
+        var angle = noise(xoff, yoff) * TWO_PI;
+        var v = p5.Vector.fromAngle(angle);
+        v.setMag(1);
+        // flowfield[index] = v;
+        flowfield[index] = angle;
+        xoff += turbulence;
+        // stroke(0, 50);
+        // push();
+        // translate(x * pix_size, y * pix_size);
+        // rotate(v.heading());
+        // strokeWeight(1);
+        // line(0, 0, pix_size, 0);
+        // pop();
+      }
+      yoff += turbulence;
+    }
   }
 
+  // "lines"
   for (var i = 0; i < density; i++) {
       var length = random(5,15);
       let c = random(palette['colors']);
@@ -190,6 +249,7 @@ function draw() {
         noStroke();
       }
 
+      //draw a "line"
       for (var j = 0; j < length; j++){
         var pixel_x, pixel_y, p_index, next_pixel;
         if (j == 0) {
