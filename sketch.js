@@ -17,16 +17,16 @@ var canv = 336;
 var pix_size = canv/pix;
 var cols, rows;
 var fr;
-let attributes = {};
+let traits = {};
 
 //flowfield vars
 var turbulence_arr = [.001, .075, .1, .125, .25];
 var turbulence = p5.prototype.random(turbulence_arr);
-if (turbulence == .001) attributes['turbulence'] = 'very low';
-if (turbulence == .075) attributes['turbulence'] = 'low';
-if (turbulence == .100) attributes['turbulence'] = 'med';
-if (turbulence == .125) attributes['turbulence'] = 'high';
-if (turbulence == .25) attributes['turbulence'] = 'very high';
+if (turbulence == .001) traits['turbulence'] = 'very low';
+if (turbulence == .075) traits['turbulence'] = 'low';
+if (turbulence == .100) traits['turbulence'] = 'med';
+if (turbulence == .125) traits['turbulence'] = 'high';
+if (turbulence == .25) traits['turbulence'] = 'very high';
 
 var flowfield;
 
@@ -43,9 +43,9 @@ for (var i = 0; i < pix*pix ; i++) {
 }
 var outlined = p5.prototype.random() < 0.75;
 
-attributes['density'] = density;
-attributes['margin'] = margin;
-attributes['outlined'] = outlined;
+traits['density'] = density;
+traits['margin'] = margin;
+traits['outlined'] = outlined;
 console.log("turbulence: " + turbulence);
 console.log("have margin: " + margin);
 console.log("outlined: " + outlined);
@@ -54,67 +54,67 @@ console.log('density: ' + density);
 //color palettes
 let luxe = {
   name: "luxe",
-  bg: '#EBE4D8',
+  bg: ['#EBE4D8'],
   colors: ['#DB4F54', '#FCD265', '#E67D32', '#FCBC19', '#FCD265', '#29A691', '#B8D9CE', '#315F8C', '#543E2E', '#3B2B20']
 }
 let rad = {
   name: "rad",
-  bg: '#EBE4D8', 
+  bg: ['#EBE4D8'], 
   colors: ['#DB4F54', '#DB4F54', '#FCD265', '#FCD265', '#7CA9BF', '#315F8C', '#543E2E', '#FAF8F5']
 }
 let golf_socks = {
   name: "golf_socks",
-  bg: '#66806A', 
+  bg: ['#66806A'], 
   colors: ['#F09191', '#EA908E', '#274E2E', '#18344E', '#1A364F', '#E7C1BB', '#2A5030', '#E9E2D6']
 }
 let baked = {
   name: "baked",
-  bg: '#EBE4D8', 
+  bg: ['#EBE4D8'], 
   colors: ['#F7B1A1', '#F6D4CA', '#418D48', '#CAE5CC', '#634D3A', '#F9F7F3']
 }
 let politique = {
   name: "politique",
-  bg: '#EBE4D8', 
+  bg: ['#EBE4D8'], 
   colors: ['#DB4F54', '#F7B1A1', '#FCD265', '#315F8C', '#EAE9E6', '#FAF8F5']
 }
 let white_mono = {
   name: "white_mono",
-  bg: '#DB4F54',
+  bg: ['#DB4F54', '#F7B1A1', '#29A691', '#1A1A1A', '#1F3359', '#211812', '#FCD265', '#E67D32', '#34628E'],
   colors: ['#FAF8F5']
 }
 let cool = {
   name: "cool",
-  bg: '#F7B1A1',
+  bg: ['#F7B1A1'],
   colors: ['#FCD265', '#29A691', '#1F3359', '#315F8C', '#7CA9BF', '#E0D7C5', '#CFE6DE']
 }
 let am = {
   name: "am",
-  bg: '#3D364D',
+  bg: ['#3D364D'],
   colors: ['#E6918A', '#E6D2AC', '#CCB9B8', '#3D4D4D', '#8FB395', '#2C2933', '#3E3E59']
 }
 let white_on_cream = {
   name: "white_on_cream",
-  bg: '#EBE4D8',
+  bg: ['#EBE4D8'],
   colors: ['#FAF8F5']
 }
 let party_time = {
   name: "party_time",
-  bg: '#0F1833',
+  bg: ['#0F1833'],
   colors: ['#C1495D', '#DF455F', '#DF4E66', '#D75C71']
 }
 let black = {
   name: "black_forest",
-  bg: '#EBE4D8',
+  bg: ['#EBE4D8'],
   colors: ['#1D1D1D', '#2E2D2C']
 }
 let rose = {
   name: "rose",
-  bg: '#464D49',
+  bg: ['#464D49'],
   colors: ['#B3243C', '#E65C73', '#CC7080', '#5E6662', '#38403D', '#F7C7B7', '#FFDAD6']
 }
 let dark_lifestyle = {
   name: "dark_lifestyle",
-  bg: '#1A1A1A',
+  bg: ['#1A1A1A'],
   colors: ['#212121', '#292929', '#303030', '#383838']
 }
 let palettes = [luxe, rad, golf_socks, baked, politique, white_mono, cool, am, white_on_cream, party_time, black, rose, dark_lifestyle];
@@ -128,11 +128,12 @@ function setup() {
   fr = createP('');
 
   flowfield = new Array(cols * rows);
+
   //pick palette
   palette = random(palettes);
-  attributes['palette'] = palette['name'];
+  traits['palette'] = palette['name'];
   console.log('palette: ' + palette['name']);
-  background(palette['bg']);
+  background(random(palette['bg']));
   
   //draw a grid
   // for (var i = 0; i < rows; i++) {
@@ -222,5 +223,5 @@ function draw() {
   }
   noLoop();
 
-  document.getElementById('attributes').innerHTML = JSON.stringify(attributes);
+  document.getElementById('traits').innerHTML = JSON.stringify(traits);
 }
