@@ -20,7 +20,7 @@ var fr;
 let traits = {};
 
 //flowfield vars
-var swirl = true;//p5.prototype.random < 0.1;
+var swirl = p5.prototype.random < 0.25;
 var turbulence_arr = [.001, .075, .1, .125, .25];
 var turbulence = p5.prototype.random(turbulence_arr);
 if (turbulence == .001) traits['turbulence'] = 'very low';
