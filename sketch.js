@@ -20,7 +20,7 @@ var fr;
 let traits = {};
 
 //flowfield vars
-var swirl = false;//p5.prototype.random < 0.1;
+var swirl = true;//p5.prototype.random < 0.1;
 var turbulence_arr = [.001, .075, .1, .125, .25];
 var turbulence = p5.prototype.random(turbulence_arr);
 if (turbulence == .001) traits['turbulence'] = 'very low';
@@ -162,7 +162,7 @@ function nextPixel(angle) {
 function draw() {
   if (swirl) {
     var angle = 0;
-    var d_angle = PI / 200; 
+    var d_angle = PI / 600; 
     var swirl_index = [];
     swirl_index.push(275);
     flowfield[275] = angle;
@@ -204,15 +204,16 @@ function draw() {
       flowfield[prev+1] = angle;
     }
 
-    for (var k = 0 ; k < flowfield.length ;k ++) {
-        stroke(0, 50);
-        push();
-        translate(k%24 * pix_size, floor(k/24) * pix_size);
-        rotate(flowfield[k]);
-        strokeWeight(1);
-        line(0, 0, pix_size, 0);
-        pop();
-    }
+    // for (var k = 0 ; k < flowfield.length ;k ++) {
+    //     stroke(0, 50);
+    //     push();
+    //     translate(k%24 * pix_size, floor(k/24) * pix_size);
+    //     rotate(flowfield[k]);
+    //     strokeWeight(1);
+    //     line(0, 0, pix_size, 0);
+    //     pop();
+    // }
+    console.log(flowfield);
 
   } else { // no swirl
     var yoff = 0;
@@ -248,7 +249,7 @@ function draw() {
       } else {
         noStroke();
       }
-
+      
       //draw a "line"
       for (var j = 0; j < length; j++){
         var pixel_x, pixel_y, p_index, next_pixel;
