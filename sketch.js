@@ -340,5 +340,5 @@ function draw() {
 
   noLoop();
 
-  document.getElementById('traits').innerHTML = JSON.stringify(traits);
+  document.getElementById('traits').innerHTML = JSON.stringify(traits, undefined, 2);
 }
