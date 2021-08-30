@@ -23,9 +23,10 @@ let traits = {};
 var swirl = p5.prototype.random() < 0.25;
 var turbulence_arr = [.001, .075, .1, .125, .25];
 var turbulence = p5.prototype.random(turbulence_arr);
+
 if (turbulence == .001) traits['turbulence'] = 'very low';
 if (turbulence == .075) traits['turbulence'] = 'low';
-if (turbulence == .100) traits['turbulence'] = 'med';
+if (turbulence == .100) traits['turbulence'] = 'medium';
 if (turbulence == .125) traits['turbulence'] = 'high';
 if (turbulence == .25) traits['turbulence'] = 'very high';
 
@@ -43,7 +44,12 @@ for (var i = 0; i < pix*pix ; i++) {
 }
 var outlined = p5.prototype.random() < 0.75;
 
-traits['density'] = density;
+if (density < 130) traits['density'] = 'very low';
+if (density >= 130 && turbulence < 160) traits['density'] = 'low';
+if (density >= 160 && turbulence < 190) traits['density'] = 'medium';
+if (density >= 190 && turbulence < 220) traits['density'] = 'high';
+if (density > 220) traits['density'] = 'very high';
+
 traits['margin'] = margin;
 traits['outlined'] = outlined;
 traits['swirl'] = swirl;
